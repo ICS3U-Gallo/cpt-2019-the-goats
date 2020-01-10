@@ -12,7 +12,7 @@ SCREEN_TITLE = "2D Temple Run"
 VIEWPORT_MARGIN = 40
 RIGHT_MARGIN = 150
 
-# Physics
+# Physics stuff
 MOVEMENT_SPEED = 5
 JUMP_SPEED = 14
 GRAVITY = 0.4
@@ -91,13 +91,13 @@ class TempleRunEpisode01(arcade.Window):
         enemy.bottom = SPRITE_SIZE * 4
         enemy.left = SPRITE_SIZE * 4
 
-        # Set boundaries on the left/right the enemy can't cross
+        # Set boundaries on the left/right that the enemy can't cross
         enemy.boundary_right = SPRITE_SIZE * 8
         enemy.boundary_left = SPRITE_SIZE * 3
         enemy.change_x = 2
         self.enemy_list.append(enemy)
 
-        # -- Set up the player
+        # -- :)Set up the player
         self.player_sprite = arcade.Sprite("girl.png", SPRITE_SCALING)
         self.player_list.append(self.player_sprite)
 

@@ -1,97 +1,97 @@
 """
-Starting Template
-
-Once you have learned how to use classes, you can begin your program with this
-template.
+This simple animation example shows how to move an item with the keyboard.
 
 If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.starting_template
+python -m arcade.examples.move_keyboard
 """
+
 import arcade
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Starting Template"
+SCREEN_WIDTH = 640
+SCREEN_HEIGHT = 480
+SCREEN_TITLE = "Move Keyboard Example"
+MOVEMENT_SPEED = 3
+
+
+class Ball:
+    def __init__(self, position_x, position_y, change_x, change_y, radius, color):
+
+        # Take the parameters of the init function above, and create instance variables out of them.
+        self.position_x = position_x
+        self.position_y = position_y
+        self.change_x = change_x
+        self.change_y = change_y
+        self.radius = radius
+        self.color = color
+
+    def draw(self):
+        """ Draw the balls with the instance variables we have. """
+        arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
+
+    def update(self):
+        # Move the ball
+        self.position_y += self.change_y
+        self.position_x += self.change_x
+
+        # See if the ball hit the edge of the screen. If so, change direction
+        if self.position_x < self.radius:
+            self.position_x = self.radius
+
+        if self.position_x > SCREEN_WIDTH - self.radius:
+            self.position_x = SCREEN_WIDTH - self.radius
+
+        if self.position_y < self.radius:
+            self.position_y = self.radius
+
+        if self.position_y > SCREEN_HEIGHT - self.radius:
+            self.position_y = SCREEN_HEIGHT - self.radius
 
 
 class MyGame(arcade.Window):
-    """
-    Main application class.
-
-    NOTE: Go ahead and delete the methods you don't need.
-    If you do need a method, delete the 'pass' and replace it
-    with your own code. Don't leave 'pass' in this program.
-    """
 
     def __init__(self, width, height, title):
+
+        # Call the parent class's init function
         super().__init__(width, height, title)
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        # Make the mouse disappear when it is over the window.
+        # So we just see our object, not the pointer.
+        self.set_mouse_visible(False)
 
-        # If you have sprite lists, you should create them here,
-        # and set them to None
+        arcade.set_background_color(arcade.color.ASH_GREY)
 
-    def setup(self):
-        # Create your sprites and sprite lists here
-        pass
+        # Create our ball
+        self.ball = Ball(50, 50, 0, 0, 15, arcade.color.AUBURN)
 
     def on_draw(self):
-        """
-        Render the screen.
-        """
-
-        # This command should happen before we start drawing. It will clear
-        # the screen to the background color, and erase what we drew last frame.
+        """ Called whenever we need to draw the window. """
         arcade.start_render()
-
-        # Call draw() on all your sprite lists below
+        self.ball.draw()
 
     def on_update(self, delta_time):
-        """
-        All the logic to move, and the game logic goes here.
-        Normally, you'll call update() on the sprite lists that
-        need it.
-        """
-        pass
+        self.ball.update()
 
-    def on_key_press(self, key, key_modifiers):
-        """
-        Called whenever a key on the keyboard is pressed.
+    def on_key_press(self, key, modifiers):
+        """ Called whenever the user presses a key. """
+        if key == arcade.key.LEFT:
+            self.ball.change_x = -MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT:
+            self.ball.change_x = MOVEMENT_SPEED
+        elif key == arcade.key.UP:
+            self.ball.change_y = MOVEMENT_SPEED
+        elif key == arcade.key.DOWN:
+            self.ball.change_y = -MOVEMENT_SPEED
 
-        For a full list of keys, see:
-        http://arcade.academy/arcade.key.html
-        """
-        pass
-
-    def on_key_release(self, key, key_modifiers):
-        """
-        Called whenever the user lets off a previously pressed key.
-        """
-        pass
-
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
-        """
-        Called whenever the mouse moves.
-        """
-        pass
-
-    def on_mouse_press(self, x, y, button, key_modifiers):
-        """
-        Called when the user presses a mouse button.
-        """
-        pass
-
-    def on_mouse_release(self, x, y, button, key_modifiers):
-        """
-        Called when a user releases a mouse button.
-        """
-        pass
+    def on_key_release(self, key, modifiers):
+        """ Called whenever a user releases a key. """
+        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+            self.ball.change_x = 0
+        elif key == arcade.key.UP or key == arcade.key.DOWN:
+            self.ball.change_y = 0
 
 
 def main():
-    """ Main method """
-    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    game.setup()
+    MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     arcade.run()
 
 

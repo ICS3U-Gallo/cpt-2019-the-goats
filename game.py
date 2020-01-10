@@ -145,7 +145,7 @@ class TempleRunEpisode01(arcade.Window):
             self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
-        """ Movement and game logic """
+        """ Movement and game logic stuff """
 
         # Update the player based on the physics engine
         if not self.game_over:
@@ -154,22 +154,24 @@ class TempleRunEpisode01(arcade.Window):
 
             # Check each enemy
             for enemy in self.enemy_list:
-                # If the enemy hit a wall, reverse
+                # If the enemy hit a wall, return
                 if len(arcade.check_for_collision_with_list(enemy, self.wall_list)) > 0:
                     enemy.change_x *= -1
-                # If the enemy hit the left boundary, reverse
+                # If the enemy hit the left boundary, go back and return 
                 elif enemy.boundary_left is not None and enemy.left < enemy.boundary_left:
                     enemy.change_x *= -1
-                # If the enemy hit the right boundary, reverse
+                # If the enemy hit the right boundary, go back and return
                 elif enemy.boundary_right is not None and enemy.right > enemy.boundary_right:
                     enemy.change_x *= -1
 
             # Update the player using the physics engine
             self.physics_engine.update()
 
-            # See if the player hit a worm. If so, game over.
+            # See if the player hit a enemy. If so, game over.
             if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
                 self.game_over = True
+                
+            
 
 
 def main():

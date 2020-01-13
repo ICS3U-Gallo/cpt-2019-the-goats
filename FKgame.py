@@ -11,7 +11,12 @@ SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 SCREEN_TITLE = "Battle Zudor"
 MOVEMENT_SPEED = 7
-
+enemy_hp_bar = 220
+hp_bar = 0
+box_width_left = 210
+box_width_right = 430
+box_hight_up = 250
+box_hight_down = 50
 
 class Ball:
     def __init__(self, position_x, position_y, change_x, change_y, radius, color):
@@ -27,9 +32,9 @@ class Ball:
     def draw(self):
         """ Draw the balls with the instance variables we have. """
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
-        arcade.draw_lrtb_rectangle_outline(210, 430, 250, 50, arcade.color.WHITE)
+        arcade.draw_lrtb_rectangle_outline(box_width_left, box_width_right, box_hight_up, box_hight_down, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_outline(210, 430, 290, 270, arcade.color.WHITE)
-        arcade.draw_rectangle_filled(320, 280, 220, 20, arcade.color.WHITE)
+        arcade.draw_rectangle_filled(320, 280, enemy_hp_bar, 20, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_outline(50, 160, 170, 120, arcade.color.WHITE)
 
     def update(self):
@@ -48,7 +53,8 @@ class Ball:
             self.position_y = self.radius
 
         if self.position_y > SCREEN_HEIGHT - self.radius:
-            self.position_y = SCREEN_HEIGHT - self.radius
+            self.position_y = SCREEN_HEIGHT - self.radius    
+
 
 
 class MyGame(arcade.Window):

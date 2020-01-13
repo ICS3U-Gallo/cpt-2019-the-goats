@@ -9,8 +9,8 @@ import arcade
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
-SCREEN_TITLE = "Move Keyboard Example"
-MOVEMENT_SPEED = 3
+SCREEN_TITLE = "Battle Zudor"
+MOVEMENT_SPEED = 7
 
 
 class Ball:
@@ -27,6 +27,10 @@ class Ball:
     def draw(self):
         """ Draw the balls with the instance variables we have. """
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
+        arcade.draw_lrtb_rectangle_outline(210, 430, 250, 50, arcade.color.WHITE)
+        arcade.draw_lrtb_rectangle_outline(210, 430, 290, 270, arcade.color.WHITE)
+        arcade.draw_rectangle_filled(320, 280, 220, 20, arcade.color.WHITE)
+        arcade.draw_lrtb_rectangle_outline(50, 160, 170, 120, arcade.color.WHITE)
 
     def update(self):
         # Move the ball
@@ -58,10 +62,10 @@ class MyGame(arcade.Window):
         # So we just see our object, not the pointer.
         self.set_mouse_visible(False)
 
-        arcade.set_background_color(arcade.color.ASH_GREY)
+        arcade.set_background_color(arcade.color.BLACK)
 
         # Create our ball
-        self.ball = Ball(50, 50, 0, 0, 15, arcade.color.AUBURN)
+        self.ball = Ball(320, 150, 0, 0, 8, arcade.color.RED)
 
     def on_draw(self):
         """ Called whenever we need to draw the window. """

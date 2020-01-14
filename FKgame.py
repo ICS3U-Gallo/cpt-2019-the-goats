@@ -11,12 +11,13 @@ SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 480
 SCREEN_TITLE = "Battle Zudor"
 MOVEMENT_SPEED = 7
-enemy_hp_bar = 220
+enemy_hp_bar = 430
 hp_bar = 0
 box_width_left = 210
 box_width_right = 430
 box_hight_up = 250
 box_hight_down = 50
+hp_bar = 180
 
 class Ball:
     def __init__(self, position_x, position_y, change_x, change_y, radius, color):
@@ -34,8 +35,11 @@ class Ball:
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
         arcade.draw_lrtb_rectangle_outline(box_width_left, box_width_right, box_hight_up, box_hight_down, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_outline(210, 430, 290, 270, arcade.color.WHITE)
-        arcade.draw_rectangle_filled(320, 280, enemy_hp_bar, 20, arcade.color.WHITE)
-        arcade.draw_lrtb_rectangle_outline(50, 160, 170, 120, arcade.color.WHITE)
+        arcade.draw_lrtb_rectangle_filled(210, enemy_hp_bar, 290, 270, arcade.color.WHITE)
+        arcade.draw_lrtb_rectangle_outline(30, 180, 170, 120, arcade.color.WHITE)
+        arcade.draw_lrtb_rectangle_outline(30, 180, 210, 190, arcade.color.WHITE)
+        arcade.draw_lrtb_rectangle_filled(30, hp_bar, 210, 190, arcade.color.WHITE)
+        arcade.text.draw_text('Shift to rest, enter to attack', 35, 120, arcade.color.WHITE, 50, 700)
 
     def update(self):
         # Move the ball
@@ -46,14 +50,20 @@ class Ball:
         if self.position_x < self.radius:
             self.position_x = self.radius
 
-        if self.position_x > SCREEN_WIDTH - self.radius:
-            self.position_x = SCREEN_WIDTH - self.radius
+        if self.position_x > box_width_right - self.radius:
+            self.position_x = box_width_right - self.radius
 
         if self.position_y < self.radius:
             self.position_y = self.radius
 
-        if self.position_y > SCREEN_HEIGHT - self.radius:
-            self.position_y = SCREEN_HEIGHT - self.radius    
+        if self.position_y > box_hight_up - self.radius:
+            self.position_y = box_hight_up - self.radius 
+        
+        if self.position_x < box_width_left + self.radius:
+            self.position_x = box_width_left + self.radius
+
+        if self.position_y < box_hight_down + self.radius:
+            self.position_y = box_hight_down + self.radius
 
 
 

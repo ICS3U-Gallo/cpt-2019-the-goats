@@ -18,7 +18,24 @@ box_width_right = 430
 box_hight_up = 250
 box_hight_down = 50
 hp_bar = 180
+health = 99
+enemy_health = 50 
 
+class Menu:
+    def draw(rest):
+        def draw(rest):
+            """ Draw the balls with the instance variables we have. """
+            arcade.draw_lrtb_rectangle_outline(box_width_left, box_width_right, box_hight_up, box_hight_down, arcade.color.WHITE)
+            arcade.draw_lrtb_rectangle_outline(210, 430, 290, 270, arcade.color.WHITE)
+            arcade.draw_lrtb_rectangle_filled(210, enemy_hp_bar, 290, 270, arcade.color.WHITE)
+            arcade.draw_lrtb_rectangle_outline(30, 180, 170, 120, arcade.color.WHITE)
+            arcade.draw_lrtb_rectangle_outline(30, 180, 210, 190, arcade.color.WHITE)
+            arcade.draw_lrtb_rectangle_filled(30, hp_bar, 210, 190, arcade.color.WHITE)
+            arcade.text.draw_text('Shift to rest, enter to attack', 35, 120, arcade.color.WHITE, 50, 700)
+            arcade.text.draw_text(f'HP Bar: {health}/99', 30, 220, arcade.color.WHITE, 15, 700)
+            arcade.text.draw_text(f'Zodars HP Bar: {enemy_health}/50', 210, 300, arcade.color.WHITE, 15, 950)
+
+#Attack scenes
 class Ball:
     def __init__(self, position_x, position_y, change_x, change_y, radius, color):
 
@@ -30,8 +47,8 @@ class Ball:
         self.radius = radius
         self.color = color
 
+    
     def draw(self):
-        """ Draw the balls with the instance variables we have. """
         arcade.draw_circle_filled(self.position_x, self.position_y, self.radius, self.color)
         arcade.draw_lrtb_rectangle_outline(box_width_left, box_width_right, box_hight_up, box_hight_down, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_outline(210, 430, 290, 270, arcade.color.WHITE)
@@ -40,7 +57,20 @@ class Ball:
         arcade.draw_lrtb_rectangle_outline(30, 180, 210, 190, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_filled(30, hp_bar, 210, 190, arcade.color.WHITE)
         arcade.text.draw_text('Shift to rest, enter to attack', 35, 120, arcade.color.WHITE, 50, 700)
-
+        arcade.text.draw_text(f'HP Bar: {health}/99', 30, 220, arcade.color.WHITE, 15, 700)
+        arcade.text.draw_text(f'Zodars HP Bar: {enemy_health}/50', 210, 300, arcade.color.WHITE, 15, 950)
+    def on_key_press(self, key, modifiers):
+        """ Called whenever the user presses a key. """
+        if key == arcade.key.ENTER:
+            enemy_health -= 5
+            ball.self.draw()
+        elif key == arcade.key.SHIFT:
+            health += 10
+            ball.self.draw()
+    
+    def update(rest):
+        pass
+    
     def update(self):
         # Move the ball
         self.position_y += self.change_y
@@ -55,7 +85,7 @@ class Ball:
 
         if self.position_y < self.radius:
             self.position_y = self.radius
-
+ 
         if self.position_y > box_hight_up - self.radius:
             self.position_y = box_hight_up - self.radius 
         
@@ -93,20 +123,20 @@ class MyGame(arcade.Window):
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        if key == arcade.key.LEFT:
+        if key == arcade.key.LEFT or key == arcade.key.A:
             self.ball.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.ball.change_x = MOVEMENT_SPEED
-        elif key == arcade.key.UP:
+        elif key == arcade.key.UP or key == arcade.key.W:
             self.ball.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.DOWN or key == arcade.key.S:
             self.ball.change_y = -MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
-        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        if key == arcade.key.LEFT or key == arcade.key.A or key == arcade.key.RIGHT or key == arcade.key.D:
             self.ball.change_x = 0
-        elif key == arcade.key.UP or key == arcade.key.DOWN:
+        elif key == arcade.key.UP or key == arcade.key.W or key == arcade.key.DOWN or key == arcade.key.S:
             self.ball.change_y = 0
 
 

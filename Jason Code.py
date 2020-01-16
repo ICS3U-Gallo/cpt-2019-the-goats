@@ -11,7 +11,6 @@ GRAVITY = 0.3
 Sprite_scaling = 0.5
 
 
-
 class Chapter2View(arcade.View):
     def __init__(self):     
         super().__init__()
@@ -24,13 +23,14 @@ class Chapter2View(arcade.View):
                                                                BLACK,
                                                                outer_alpha=255)
         
-        self.sprite1 = None
         self.wall_list = None
         self.physics_engine = None
         self.wall_list = None
         
         # If you have sprite lists, you should create them here,
         # and set them to Noneound1
+
+        self.setup()
     
     def setup(self):
         self.sprite1.center_x = 64
@@ -50,33 +50,31 @@ class Chapter2View(arcade.View):
                            [768, 96]]
         for coordinate in coordinate_list:
             # Add a crate on the ground
-            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png" , 
+            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", 
                                  TILE_SCALING) 
             wall.position = coordinate
             self.wall_list.append(wall)
-        self.physics_engine = arcade.PhysicsEngineSimple(self.sprite1, 
-                                                         self.wall_list)
+        self.physics_engine = arcade.PhysicsEnginePlatformer(self.sprite1, 
+                                                             self.wall_list)
 
     def on_draw(self):
         arcade.start_render()  # keep as first line
         self.wall_list.draw()
+        self.sprite1.draw()
         # Draw everything below here.def update(self, delta_time):
         """
         All the logic to move, and the game logic goes here.
         Normally, you'll call update() on the sprite lists that
         need it.
         """
-        
-        def update(self):
-            self.physics_engine.update()
-            self.sprite1.update()
-            self.center_x += self.change_x
-            self.center_y += self.change_y
+    
+    def update(self, deltatime):
+        self.physics_engine.update()
 
-            if self.sprite1.left < 0:
-                self.sprite1.left = 0
-            elif self.sprite1.right > SCREEN_WIDTH - 1:
-                self.sprite1.right = SCREEN_WIDTH - 1
+        if self.sprite1.left < 0:
+            self.sprite1.left = 0
+        elif self.sprite1.right > settings.WIDTH - 1:
+            self.sprite1.right = settings.WIDTH - 1
 
     def on_key_press(self, key, key_modifiers):
         """
@@ -85,7 +83,7 @@ class Chapter2View(arcade.View):
         http://arcade.academy/arcade.key.html
         """
         if key == arcade.key.UP or key == arcade.key.W:
-            if self.sprite1.physics_engine.can_jump():
+            if self.physics_engine.can_jump():
                 self.sprite1.change_y = JUMP_SPEED
         elif key == arcade.key.LEFT or key == arcade.key.A:
             self.sprite1.change_x = -MOVEMENT_SPEED

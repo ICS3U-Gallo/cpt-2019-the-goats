@@ -13,6 +13,48 @@ SCREEN_TITLE = "Sprite Rooms Example"
 MOVEMENT_SPEED = 5
 
 
+class Coin2(arcade.Sprite):
+    """
+    This class represents the coins on our screen. It is a child class of
+    the arcade library's "Sprite" class.
+    """
+
+    def follow_sprite(self, player_sprite):
+        """
+        This function will move the current sprite towards whatever
+        other sprite is specified as a parameter.
+
+        We use the 'min' function here to get the sprite to line up with
+        the target sprite, and not jump around if the sprite is not off
+        an exact multiple of SPRITE_SPEED.
+        """
+
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+
+        # Random 1 in 100 chance that we'll change from our old direction and
+        # then re-aim toward the player
+        if random.randrange(100) == 0:
+            start_x = self.center_x
+            start_y = self.center_y
+
+            # Get the destination location for the bullet
+            dest_x = player_sprite.center_x
+            dest_y = player_sprite.center_y
+
+            # Do math to calculate how to get the bullet to the destination.
+            # Calculation the angle in radians between the start points
+            # and end points. This is the angle the bullet will travel.
+            x_diff = dest_x - start_x
+            y_diff = dest_y - start_y
+            angle = math.atan2(y_diff, x_diff)
+
+            # Taking into account the angle, calculate our change_x
+            # and change_y. Velocity is how fast the bullet travels.
+            self.change_x = math.cos(angle) * 0.5
+            self.change_y = math.sin(angle) * 0.5
+
+
 class Coin(arcade.Sprite):
 
     def __init__(self, filename, sprite_scaling):
@@ -102,7 +144,7 @@ def setup_room_1():
     # If you want coins or monsters in a level, then add that code here.
     # Create the coin instance
     for i in range(50):
-        coin = Coin(":resources:images/items/coinGold.png", SPRITE_SCALING*5)
+        coin = Coin(":resources:images/items/coinGold.png", SPRITE_SCALING)
         # Position the center of the circle the coin will orbit
         coin.circle_center_x = random.randrange(SCREEN_WIDTH-100)
         coin.circle_center_y = random.randrange(SCREEN_HEIGHT-100)
@@ -125,7 +167,7 @@ def setup_room_2():
     """ Set up the game and initialize the variables. """
     # Sprite lists
     room.wall_list = arcade.SpriteList()
-
+    room.coin_list = arcade.SpriteList()
     # -- Set up the walls
     # Create bottom and top row of boxes
     # This y loops a list of two, the coordinate 0, and just under the top of window
@@ -153,7 +195,15 @@ def setup_room_2():
     wall.bottom = 6 * SPRITE_SIZE
     room.wall_list.append(wall)
     room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")
+    for i in range(50):
+        # Create the coin instance
+        # Coin image from kenney.nl
+        coin = Coin2(":resources:images/items/coinGold.png", SPRITE_SCALING)
 
+        # Position the coin
+        coin.center_x = random.randrange(SCREEN_WIDTH)
+        coin.center_y = random.randrange(SCREEN_HEIGHT)
+        room.coin_list.append(coin)
     return room
 
 
@@ -178,7 +228,7 @@ class MyGame(arcade.Window):
     def setup(self):
         """ Set up the game and initialize the variables. """
         # Set up the player
-        self.player_sprite = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
+        self.player_sprite = arcade.Sprite("assets/girl.png", 1)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 100
         self.player_list = arcade.SpriteList()
@@ -246,7 +296,6 @@ class MyGame(arcade.Window):
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.physics_engine.update()
-        self.rooms[self.current_room].coin_list.update()
         # Do some logic here to figure out what room we are in, and if we need to go
         # to a different room.
         if self.player_sprite.center_x > SCREEN_WIDTH and self.current_room == 0:
@@ -260,24 +309,16 @@ class MyGame(arcade.Window):
                                                              self.rooms[self.current_room].wall_list)
             self.player_sprite.center_x = SCREEN_WIDTH
 
+        self.rooms[self.current_room].coin_list.update()
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(self.player_sprite,
-                                                        self.rooms[self.current_room].wall_list)
+                                                        self.rooms[self.current_room].coin_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
-        for wall in hit_list:
-            wall.remove_from_sprite_lists()
+        for coin in hit_list:
+            coin.remove_from_sprite_lists()
 
 
-def main():
-    """ Main method """
-    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    window.setup()
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()
 def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)

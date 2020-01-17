@@ -2,10 +2,6 @@ import arcade
 import math
 import random
 
-#PROBLEMS WITH CODE
-#Player cannot be seen in second room
-#Coins(Meant to be enemies) cannot be seen or interacted with
-#Dont know how to use hitlist with rooms
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
@@ -104,25 +100,19 @@ def setup_room_1():
     room.wall_list.append(wall)
 
     # If you want coins or monsters in a level, then add that code here.
+    # Create the coin instance
     for i in range(50):
-        # Create the coin instance
-        coin = Coin(":resources:images/items/coinGold.png", SPRITE_SCALING / 3)
-
+        coin = Coin(":resources:images/items/coinGold.png", SPRITE_SCALING*5)
         # Position the center of the circle the coin will orbit
-        coin.circle_center_x = random.randrange(SCREEN_WIDTH)
-        coin.circle_center_y = random.randrange(SCREEN_HEIGHT)
-
-        # Random radius from 10 to 200
-        coin.circle_radius = random.randrange(10, 200)
-
+        coin.circle_center_x = random.randrange(SCREEN_WIDTH-100)
+        coin.circle_center_y = random.randrange(SCREEN_HEIGHT-100)
+        coin.circle_radius = random.randrange(10, 50)
         # Random start angle from 0 to 2pi
         coin.circle_angle = random.random() * 2 * math.pi
-
         # Add the coin to the lists
         room.coin_list.append(coin)
     # Load the background image for this level.
     room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
-
     return room
 
 
@@ -171,9 +161,7 @@ class MyGame(arcade.Window):
     """ Main application class. """
 
     def __init__(self, width, height, title):
-        """
-        Initializer
-        """
+
         super().__init__(width, height, title)
 
         # Set the working directory (where we expect to find files) to the same
@@ -182,7 +170,6 @@ class MyGame(arcade.Window):
         # as mentioned at the top of this program.
         # Sprite lists
         self.current_room = 0
-        # Set up the player
         self.rooms = None
         self.player_sprite = None
         self.player_list = None
@@ -259,7 +246,7 @@ class MyGame(arcade.Window):
         # Call update on all sprites (The sprites don't do much in this
         # example though.)
         self.physics_engine.update()
-
+        self.rooms[self.current_room].coin_list.update()
         # Do some logic here to figure out what room we are in, and if we need to go
         # to a different room.
         if self.player_sprite.center_x > SCREEN_WIDTH and self.current_room == 0:
@@ -275,12 +262,22 @@ class MyGame(arcade.Window):
 
         # Generate a list of all sprites that collided with the player.
         hit_list = arcade.check_for_collision_with_list(self.player_sprite,
-                                                        self.rooms.coin_list)
+                                                        self.rooms[self.current_room].wall_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
-        for coin in hit_list:
-            coin.remove_from_sprite_lists()
+        for wall in hit_list:
+            wall.remove_from_sprite_lists()
 
+
+def main():
+    """ Main method """
+    window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window.setup()
+    arcade.run()
+
+
+if __name__ == "__main__":
+    main()
 def main():
     """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)

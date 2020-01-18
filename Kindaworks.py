@@ -3,30 +3,24 @@ import math
 import random
 
 SPRITE_SCALING = 0.5
-SPRITE_NATIVE_SIZE = 128
+SPRITE_NATIVE_SIZE = 100
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
-
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Rooms Example"
-
 MOVEMENT_SPEED = 5
 
 
-class Coin(arcade.Sprite):
-
+class Zombie(arcade.Sprite):
     def __init__(self, filename, sprite_scaling):
-        """ Constructor. """
         super().__init__(filename, sprite_scaling)
         self.circle_angle = 0
         self.circle_radius = 0
-        self.circle_speed = 0.008
+        self.circle_speed = 0.02
         self.circle_center_x = 0
         self.circle_center_y = 0
 
     def update(self):
-
-        """ Update the ball's position. """
         self.center_x = self.circle_radius * math.sin(self.circle_angle) \
             + self.circle_center_x
         self.center_y = self.circle_radius * math.cos(self.circle_angle) \
@@ -35,36 +29,31 @@ class Coin(arcade.Sprite):
 
 
 class Room:
-    """
-    This class holds all the information about the
-    different rooms.
-    """
     def __init__(self):
         self.wall_list = None
-        self.coin_list = None
+        self.zombie_list = None
+        self.finish_list = None
         self.background = None
 
 
 def setup_room_1():
-    """
-    Create and return room 1.
-    If your program gets large, you may want to separate this into different
-    files.
-    """
     room = Room()
-    """ Set up the game and initialize the variables. """
     room.wall_list = arcade.SpriteList()
-    room.coin_list = arcade.SpriteList()
+    room.zombie_list = arcade.SpriteList()
+    room.finish_list = arcade.SpriteList()
+    finish = arcade.Sprite(":resources:images/items/coinGold.png", SPRITE_SCALING/10)
+    finish.center_x = 0
+    finish.center_y = 0
+    room.finish_list.append(finish)
     for y in (0, SCREEN_HEIGHT - SPRITE_SIZE):
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE):
             wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
             wall.left = x
             wall.bottom = y
             room.wall_list.append(wall)
-
     for x in (0, SCREEN_WIDTH - SPRITE_SIZE):
         for y in range(SPRITE_SIZE, SCREEN_HEIGHT - SPRITE_SIZE, SPRITE_SIZE):
-            if (y != SPRITE_SIZE * 4 and y != SPRITE_SIZE * 5) or x == 0:
+            if (y != SPRITE_SIZE * 4 and y != SPRITE_SIZE * 5 and y != SPRITE_SIZE * 6) or x == 0:
                 wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
                 wall.left = x
                 wall.bottom = y
@@ -75,24 +64,25 @@ def setup_room_1():
     wall.bottom = 5 * SPRITE_SIZE
     room.wall_list.append(wall)
     for i in range(50):
-        coin = Coin(":resources:images/animated_characters/zombie/zombie_walk1.png", SPRITE_SCALING)
-        coin.circle_center_x = random.randrange(50, SCREEN_WIDTH-50)
-        coin.circle_center_y = random.randrange(50, SCREEN_HEIGHT-50)
-        coin.circle_radius = random.randrange(10, 50)
-        coin.circle_angle = random.random() * 2 * math.pi
-        room.coin_list.append(coin)
+        zombie = Zombie(":resources:images/animated_characters/zombie/zombie_walk1.png", SPRITE_SCALING)
+        zombie.circle_center_x = random.randrange(100, SCREEN_WIDTH-50)
+        zombie.circle_center_y = random.randrange(110, SCREEN_HEIGHT-50)
+        zombie.circle_radius = random.randrange(10, 50)
+        zombie.circle_angle = random.random() * 2 * math.pi
+        room.zombie_list.append(zombie)
     room.background = arcade.load_texture(":resources:images/backgrounds/abstract_1.jpg")
     return room
 
 
 def setup_room_2():
-    """
-    Create and return room 2.
-    """
     room = Room()
-    """ Set up the game and initialize the variables. """
     room.wall_list = arcade.SpriteList()
-    room.coin_list = arcade.SpriteList()
+    room.zombie_list = arcade.SpriteList()
+    room.finish_list = arcade.SpriteList()
+    finish = arcade.Sprite(":resources:images/tiles/doorClosed_top.png", SPRITE_SCALING)
+    finish.center_x = 700
+    finish.center_y = 300
+    room.finish_list.append(finish)
     for y in (0, SCREEN_HEIGHT - SPRITE_SIZE):
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE):
             wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
@@ -102,7 +92,7 @@ def setup_room_2():
 
     for x in (0, SCREEN_WIDTH - SPRITE_SIZE):
         for y in range(SPRITE_SIZE, SCREEN_HEIGHT - SPRITE_SIZE, SPRITE_SIZE):
-            if (y != SPRITE_SIZE * 4 and y != SPRITE_SIZE * 5) or x != 0:
+            if (y != SPRITE_SIZE * 4 and y != SPRITE_SIZE * 5 and y != SPRITE_SIZE * 6) or x != 0:
                 wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", SPRITE_SCALING)
                 wall.left = x
                 wall.bottom = y
@@ -113,18 +103,17 @@ def setup_room_2():
     wall.bottom = 6 * SPRITE_SIZE
     room.wall_list.append(wall)
     room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")
-    for i in range(50):
-        coin = Coin(":resources:images/animated_characters/zombie/zombie_walk1.png", SPRITE_SCALING)
-        coin.circle_center_x = random.randrange(SCREEN_WIDTH-100)
-        coin.circle_center_y = random.randrange(SCREEN_HEIGHT-100)
-        coin.circle_radius = random.randrange(10, 50)
-        coin.circle_angle = random.random() * 2 * math.pi
-        room.coin_list.append(coin)
+    for i in range(60):
+        zombie = Zombie(":resources:images/animated_characters/zombie/zombie_walk1.png", SPRITE_SCALING)
+        zombie.circle_center_x = random.randrange(SCREEN_WIDTH-100)
+        zombie.circle_center_y = random.randrange(SCREEN_HEIGHT-100)
+        zombie.circle_radius = random.randrange(10, 50)
+        zombie.circle_angle = random.random() * 2 * math.pi
+        room.zombie_list.append(zombie)
     return room
 
 
 class MyGame(arcade.Window):
-    """ Main application class. """
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
         self.current_room = 0
@@ -133,9 +122,9 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.physics_engine = None
         self.game_over = False
+        self.score = 0
 
     def setup(self):
-        """ Set up the game and initialize the variables. """
         self.player_sprite = arcade.Sprite("assets/girl.png", 0.5)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 100
@@ -150,46 +139,45 @@ class MyGame(arcade.Window):
         self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.rooms[self.current_room].wall_list)
 
     def on_draw(self):
-        """
-        Render the screen.
-        """
         arcade.start_render()
         arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
                                       SCREEN_WIDTH, SCREEN_HEIGHT, self.rooms[self.current_room].background)
         self.rooms[self.current_room].wall_list.draw()
-        self.rooms[self.current_room].coin_list.draw()
+        self.rooms[self.current_room].zombie_list.draw()
+        self.rooms[self.current_room].finish_list.draw()
         self.player_list.draw()
+        output = "Fails: " + str(self.score)
+        arcade.draw_text(output, 10, 20, arcade.color.WHITE, 14)
 
     def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed. """
-
-        if key == arcade.key.UP:
+        if key == arcade.key.W:
             self.player_sprite.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
+        elif key == arcade.key.S:
             self.player_sprite.change_y = -MOVEMENT_SPEED
-        elif key == arcade.key.LEFT:
+        elif key == arcade.key.A:
             self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
+        elif key == arcade.key.D:
             self.player_sprite.change_x = MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
-        """Called when the user releases a key. """
-
-        if key == arcade.key.UP or key == arcade.key.DOWN:
+        if key == arcade.key.W or key == arcade.key.S:
             self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
+        elif key == arcade.key.A or key == arcade.key.D:
             self.player_sprite.change_x = 0
 
     def on_update(self, delta_time):
-        """ Movement and game logic """
         self.physics_engine.update()
-        self.rooms[self.current_room].coin_list.update()
+        self.rooms[self.current_room].zombie_list.update()
         if self.game_over:
             self.setup()
+            self.score += 1
             self.game_over = False
-        if len(arcade.check_for_collision_with_list(self.player_sprite, self.rooms[self.current_room].coin_list)) > 0:
+        finish_list = arcade.check_for_collision_with_list(self.player_sprite, self.rooms[self.current_room].finish_list)
+        if len(finish_list) > 0:
+            self.director.next_view()
+        death_list = arcade.check_for_collision_with_list(self.player_sprite, self.rooms[self.current_room].zombie_list)
+        if len(death_list) > 0:
             self.game_over = True
-
         if self.player_sprite.center_x > SCREEN_WIDTH and self.current_room == 0:
             self.current_room = 1
             self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite,
@@ -203,7 +191,6 @@ class MyGame(arcade.Window):
 
 
 def main():
-    """ Main method """
     window = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.setup()
     arcade.run()

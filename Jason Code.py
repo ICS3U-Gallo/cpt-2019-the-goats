@@ -4,6 +4,9 @@ import settings
 
 TITLE = '2D Temple Run'
 TILE_SCALING = 0.5
+CHARACTER_SCALING = 2
+SPRITE_NATIVE_SIZE = 128
+SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * CHARACTER_SCALING)
 'Character Physics'
 MOVEMENT_SPEED = 5
 JUMP_SPEED = 10
@@ -18,8 +21,9 @@ TOP_VIEWPORT_MARGIN = 100
 
 
 class Chapter2View(arcade.View):
-    def __init__(self):     
+    def __init__(self):
         super().__init__()
+
         arcade.set_background_color(arcade.color.SKY_BLUE)
         # Player
         self.sprite1 = arcade.Sprite(center_x=100, center_y=100)
@@ -28,28 +32,29 @@ class Chapter2View(arcade.View):
                                                                arcade.color.
                                                                BROWN,
                                                                outer_alpha=255)
-        self.enemy = arcade.Sprite(center_x=250, center_y=100)
-        self.enemy.change_x = 0.5
-        self.enemy.texture = arcade.make_soft_circle_texture(500, arcade.color.
-                                                             BLACK, 
-                                                             outer_alpha=255)
-        
+        self.enemy_list = None
         self.wall_list = None
         self.physics_engine = None
         self.game_over = False
-        
+
         # Used to keep track of our scrolling
         self.view_bottom = 0
         self.view_left = 0
-
         self.setup()
-    
+
     def setup(self):
         self.sprite1.center_x = 0
         self.sprite1.center_y = 0
+        self.enemy_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
-        for x in range(0, 1250, 64):
-            wall = arcade.Sprite(":resources:images/tiles/grassMid.png", 
+        for x in range(0, 125000, 64):
+            wall = arcade.Sprite(":resources:images/tiles/grassMid.png",
+                                 TILE_SCALING)
+            wall.center_x = x
+            wall.center_y = 32
+            self.wall_list.append(wall)
+        for x in range(10, 1250, 640):
+            wall = arcade.Sprite(":resources:images/tiles/grassMid.png",
                                  TILE_SCALING)
             wall.center_x = x
             wall.center_y = 32
@@ -60,40 +65,42 @@ class Chapter2View(arcade.View):
         coordinate_list = [[512, 96],
                            [256, 96],
                            [768, 96]]
+        coordinate_list_2 = [[3000, 96], [2000, 96], [1000, 96]]
         for coordinate in coordinate_list:
             # Add a crate on the ground
-            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png", 
-                                 TILE_SCALING) 
+            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png",
+                                 TILE_SCALING)
             wall.position = coordinate
             self.wall_list.append(wall)
-        self.enemy.center_x = 0
-        self.enemy.center_y = 0
-        self.physics_engine = arcade.PhysicsEnginePlatformer(self.sprite1, 
-                                                             self.wall_list,
-                                                             self.enemy,
-                                                             GRAVITY)
+        for coordinates in coordinate_list_2:
+            wall = arcade.Sprite(":resources:images/tiles/brickGrey.png",
+                                 TILE_SCALING)
+            wall.position = coordinates
+            self.wall_list.append(wall)
+        # Enemy
+        enemy = arcade.Sprite(":resources:images/pinball/pool_cue_ball.png", SPRITE_SIZE)
+        
+        self.enemy_list.append(enemy)
+        self.physics_engine = arcade.PhysicsEnginePlatformer(self.sprite1,
+                                                             self.wall_list,)
 
     def on_draw(self):
         arcade.start_render()  # keep as first line
         self.wall_list.draw()
         self.sprite1.draw()
-        self.enemy.draw()
+        self.enemy_list.draw()
         # Draw everything below here.def update(self, delta_time):
-        """
-        All the logic to move, and the game logic goes here.
-        Normally, you'll call update() on the sprite lists that
-        need it.
-        """
-    
-    def update(self, deltatime):
+
+    def update(self, delta_time):
         self.physics_engine.update()
+        self.enemy_list.update()
         if self.sprite1.left < 0:
             self.sprite1.left = 0
         elif self.sprite1.right > settings.WIDTH + 1:
-            self.sprite1.right = settings.WIDTH + 1
-            
-        changed = False
+            self.sprite1.right > settings.WIDTH + 1
 
+        changed = False
+        # Player
         # Scroll left
         left_boundary = self.view_left + LEFT_VIEWPORT_MARGIN
         if self.sprite1.left < left_boundary:
@@ -130,6 +137,13 @@ class Chapter2View(arcade.View):
                                 self.view_bottom,
                                 settings.HEIGHT + self.view_bottom)
 
+        if len(arcade.check_for_collision_with_list(self.sprite1, self.enemy_list)) > 0:
+            self.game_over = True
+
+        if self.game_over:
+            self.setup()
+            self.game_over = False
+
     def on_key_press(self, key, key_modifiers):
         """
         Called whenever a key on the keyboard is pressed.
@@ -152,19 +166,3 @@ class Chapter2View(arcade.View):
             self.sprite1.change_x = 0
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.sprite1.change_x = 0
-
-
-if __name__ == "__main__":
-    """This section of code will allow you to run your View
-    independently from the main.py file and its Director.
-    You can ignore this whole section. Keep it at the bottom
-    of your code.
-    It is advised you do not modify it unless you really know
-    what you are doing.
-    """
-    from utils import FakeDirector
-    window = arcade.Window(settings.WIDTH, settings.HEIGHT)
-    my_view = Chapter2View()
-    my_view.director = FakeDirector(close_on_next_view=False)
-    window.show_view(my_view)
-    arcade.run()

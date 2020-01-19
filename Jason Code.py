@@ -2,14 +2,15 @@ import arcade
 
 import settings
 
-TITLE = '2D Temple Run'
+TITLE = 'Run For Your Life'
 TILE_SCALING = 0.5
-CHARACTER_SCALING = 2
+CHARACTER_SCALING = 1
 SPRITE_NATIVE_SIZE = 1
+ENEMY_SIZE = 2
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * CHARACTER_SCALING)
 'Character Physics'
-MOVEMENT_SPEED = 5
-JUMP_SPEED = 10
+MOVEMENT_SPEED = 2.5
+JUMP_SPEED = 9
 GRAVITY = 0.3
 
 # How many pixels to keep as a minimum margin between the character
@@ -24,48 +25,47 @@ class Chapter2View(arcade.View):
     def __init__(self):
         super().__init__()
 
-        arcade.set_background_color(arcade.color.SKY_BLUE)
-        # Player
-        self.sprite1 = arcade.Sprite(center_x=100, center_y=100)
-        self.sprite1.change_x = 1
-        self.sprite1.texture = arcade.make_soft_square_texture(50,
-                                                               arcade.color.
-                                                               BROWN,
-                                                               outer_alpha=255)
+        arcade.set_background_color(arcade.color.GINGER)
+        # Sprite List
+        self.player_list = None
         self.enemy_list = None
         self.wall_list = None
+        # Player
+        self.sprite1 = None
         self.physics_engine = None
         self.game_over = False
-
+        # Enemy
+        self.enemy = None
         # Used to keep track of our scrolling
         self.view_bottom = 0
         self.view_left = 0
         self.setup()
 
     def setup(self):
-        self.sprite1.center_x = 0
-        self.sprite1.center_y = 0
+        self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
-        for x in range(0, 125000, 64):
+        # PLayer
+        self.sprite1 = arcade.Sprite("assets/girl.png", CHARACTER_SCALING)
+        self.sprite1.center_x = 150
+        self.sprite1.center_y = 100
+        # Ground
+        for x in range(0, 12500, 64):
             wall = arcade.Sprite(":resources:images/tiles/grassMid.png",
                                  TILE_SCALING)
             wall.center_x = x
             wall.center_y = 32
             self.wall_list.append(wall)
-        for x in range(10, 1250, 640):
-            wall = arcade.Sprite(":resources:images/tiles/grassMid.png",
-                                 TILE_SCALING)
-            wall.center_x = x
-            wall.center_y = 32
-            self.wall_list.append(wall)
-
         # Put some crates on the ground
         # This shows using a coordinate list to place sprites
         coordinate_list = [[512, 96],
                            [256, 96],
                            [768, 96]]
         coordinate_list_2 = [[3000, 96], [2000, 96], [1000, 96]]
+        coordinate_list_3 = [[1500, 96], [3353, 96], [2412, 96]]
+        coordinate_list_4 = [[1290, 96], [2500, 96], [3226, 96]]
+        coordinate_list_5 = [[3597, 96], [4000, 96], [4302, 96]]
+        coordinate_list_6 = [[4500, 96], [4729, 96], [4900, 96]]
         for coordinate in coordinate_list:
             # Add a crate on the ground
             wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png",
@@ -77,11 +77,35 @@ class Chapter2View(arcade.View):
                                  TILE_SCALING)
             wall.position = coordinates
             self.wall_list.append(wall)
+        for coordinates in coordinate_list_3:
+            wall = arcade.Sprite(":resources:images/tiles/brickGrey.png",
+                                 TILE_SCALING)
+            wall.position = coordinates
+            self.wall_list.append(wall)
+        for coordinates in coordinate_list_4:
+            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png",
+                                 TILE_SCALING)
+            wall.position = coordinates
+            self.wall_list.append(wall)
+        for coordinates in coordinate_list_5:
+            wall = arcade.Sprite(":resources:images/tiles/brickGrey.png",
+                                 TILE_SCALING)
+            wall.position = coordinates
+            self.wall_list.append(wall)
+        for coordinates in coordinate_list_6:
+            wall = arcade.Sprite(":resources:images/tiles/boxCrate_double.png",
+                                 TILE_SCALING)
+            wall.position = coordinates
+            self.wall_list.append(wall)
+
         # Enemy
-        enemy = arcade.Sprite(":resources:images/pinball/pool_cue_ball.png", SPRITE_SIZE)
+        enemy = arcade.Sprite(":resources:images/pinball/pool_cue_ball.png", ENEMY_SIZE)
+        enemy.center_x = 34
+        enemy.center_y = 120
+        enemy.change_x = 2
         self.enemy_list.append(enemy)
         self.physics_engine = arcade.PhysicsEnginePlatformer(self.sprite1,
-                                                             self.wall_list,)
+                                                             self.wall_list)
 
     def on_draw(self):
         arcade.start_render()  # keep as first line

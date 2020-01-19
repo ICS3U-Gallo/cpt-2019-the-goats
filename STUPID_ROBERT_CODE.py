@@ -63,7 +63,7 @@ def setup_room_1():
     wall.left = 7 * SPRITE_SIZE
     wall.bottom = 5 * SPRITE_SIZE
     room.wall_list.append(wall)
-    for i in range(50):
+    for i in range(30):
         zombie = Zombie(":resources:images/animated_characters/zombie/zombie_walk1.png", SPRITE_SCALING)
         zombie.circle_center_x = random.randrange(100, SCREEN_WIDTH-50)
         zombie.circle_center_y = random.randrange(110, SCREEN_HEIGHT-50)
@@ -103,7 +103,7 @@ def setup_room_2():
     wall.bottom = 6 * SPRITE_SIZE
     room.wall_list.append(wall)
     room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")
-    for i in range(60):
+    for i in range(30):
         zombie = Zombie(":resources:images/animated_characters/zombie/zombie_walk1.png", SPRITE_SCALING)
         zombie.circle_center_x = random.randrange(SCREEN_WIDTH-100)
         zombie.circle_center_y = random.randrange(SCREEN_HEIGHT-100)

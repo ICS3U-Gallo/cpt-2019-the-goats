@@ -1,7 +1,7 @@
 import arcade
 import os
 import settings
-from chapter_2 import TempleRunEpisode02
+from chapter_3 import TempleRunEpisode03
 
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
@@ -9,7 +9,7 @@ SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * SPRITE_SCALING)
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "2D Temple Run - Level 1"
+SCREEN_TITLE = "2D Temple Run - Level 2"
 
 VIEWPORT_MARGIN = 40
 RIGHT_MARGIN = 150
@@ -19,10 +19,9 @@ MOVEMENT_SPEED = 5
 JUMP_SPEED = 14
 GRAVITY = 0.5
 
-class TempleRunEpisode01(arcade.Window):
+class TempleRunEpisode02(arcade.Window):
     """ Main application class. """
 
-    # Constructor.
     def __init__(self):
         """
         Initializer
@@ -74,6 +73,14 @@ class TempleRunEpisode01(arcade.Window):
             wall.left = x
             self.wall_list.append(wall)
 
+        # Draw the third grassfield on the platform.
+        for x in range(SPRITE_SIZE, SPRITE_SIZE * 3, SPRITE_SIZE):
+            wall = arcade.Sprite("grassfield.png", SPRITE_SCALING)
+
+            wall.bottom = SPRITE_SIZE * 5.5
+            wall.left = x
+            self.wall_list.append(wall)
+
         # Draw the crates
         for x in range(0, SCREEN_WIDTH, SPRITE_SIZE * 4):
             wall = arcade.Sprite("crate.png", SPRITE_SCALING)
@@ -85,8 +92,8 @@ class TempleRunEpisode01(arcade.Window):
         # -- Draw first gold on the ground
         gold_coin = arcade.Sprite("gold_coin.png", SPRITE_SCALING)
 
-        gold_coin.bottom = SPRITE_SIZE
-        gold_coin.left = SPRITE_SIZE * 10
+        gold_coin.bottom = SPRITE_SIZE * 6.5
+        gold_coin.left = SPRITE_SIZE * 2
 
         self.gold_coin_list.append(gold_coin)
 
@@ -147,7 +154,7 @@ class TempleRunEpisode01(arcade.Window):
                                                              gravity_constant=GRAVITY)
 
         # Set the background color
-        arcade.set_background_color(arcade.color.LIGHT_CYAN)
+        arcade.set_background_color(arcade.color.LIGHT_BLUE)
 
     def on_draw(self):
         """
@@ -208,9 +215,9 @@ class TempleRunEpisode01(arcade.Window):
             # Update the player using the physics engine
             self.physics_engine.update()
 
-            # See if the player hit a worm. If so, game over.
+            # See if the player hit a gold coin, go to the next level.
             if len(arcade.check_for_collision_with_list(self.player_sprite, self.gold_coin_list)) > 0:
-                window = TempleRunEpisode02()
+                window = TempleRunEpisode03()
                 window.setup()
                 arcade.run()
 
@@ -218,9 +225,8 @@ class TempleRunEpisode01(arcade.Window):
             if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
                 self.game_over = True
 
-
 def main():
-    window = TempleRunEpisode01()
+    window = TempleRunEpisode02()
     window.setup()
     arcade.run()
 

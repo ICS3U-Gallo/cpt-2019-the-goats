@@ -4,7 +4,6 @@ class FakeDirector:
     """
     def __init__(self, close_on_next_view=True):
         """Create a new FakeDirector object.
-
         Args:
             exit_on_complete: Whether to close the program when
                 a view being run directly calls:

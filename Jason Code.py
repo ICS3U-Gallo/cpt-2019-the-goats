@@ -5,7 +5,7 @@ import settings
 TITLE = '2D Temple Run'
 TILE_SCALING = 0.5
 CHARACTER_SCALING = 2
-SPRITE_NATIVE_SIZE = 128
+SPRITE_NATIVE_SIZE = 1
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * CHARACTER_SCALING)
 'Character Physics'
 MOVEMENT_SPEED = 5
@@ -79,7 +79,6 @@ class Chapter2View(arcade.View):
             self.wall_list.append(wall)
         # Enemy
         enemy = arcade.Sprite(":resources:images/pinball/pool_cue_ball.png", SPRITE_SIZE)
-        
         self.enemy_list.append(enemy)
         self.physics_engine = arcade.PhysicsEnginePlatformer(self.sprite1,
                                                              self.wall_list,)
@@ -166,3 +165,20 @@ class Chapter2View(arcade.View):
             self.sprite1.change_x = 0
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.sprite1.change_x = 0
+
+
+if __name__ == "__main__":
+    """This section of code will allow you to run your View
+    independently from the main.py file and its Director.
+    You can ignore this whole section. Keep it at the bottom
+    of your code.
+    It is advised you do not modify it unless you really know
+    what you are doing.
+    """
+    from utils import FakeDirector
+
+    window = arcade.Window(settings.WIDTH, settings.HEIGHT)
+    my_view = Chapter2View()
+    my_view.director = FakeDirector(close_on_next_view=False)
+    window.show_view(my_view)
+    arcade.run()

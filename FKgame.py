@@ -48,7 +48,7 @@ class GUI:
         arcade.draw_lrtb_rectangle_outline(30, 180, 210, 190, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_filled(30, hp_bar, 210, 190, arcade.color.WHITE)
         arcade.text.draw_text('GREEN for HP, BLUE is Safe', 35, 120, arcade.color.WHITE, 40, 700)
-        arcade.text.draw_text(f'HP Bar: {health}/99', 30, 220, arcade.color.WHITE, 15, 700)
+        arcade.text.draw_text(f'HP Bar: {health}/50', 30, 220, arcade.color.WHITE, 15, 700)
         arcade.text.draw_text(f'Zodars HP Bar: {enemy_health}/50', 210, 300, arcade.color.WHITE, 15, 950)
     def on_key_press(self, key, modifiers):
         pass
@@ -80,8 +80,6 @@ class GUI:
             self.position_x = box_width_left + self.radius
         if self.position_y < box_hight_down + self.radius:
             self.position_y = box_hight_down + self.radius
-        if radius == Enemy1.radius_1:
-            health = health - 2
 
 class Enemy1:
     def __init__(self, position_x_1, position_y_1, change_x_1, change_y_1, radius_1, color_1):
@@ -113,6 +111,8 @@ class Enemy1:
         # Move the ball
         self.position_y_enemy += self.change_y_enemy
         self.position_x_enemy += self.change_x_enemy
+
+        
 
         # See if the ball hit the edge of the screen. If so, change direction
         if self.position_x_enemy < self.radius:
@@ -186,6 +186,14 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         self.ball.update()
+        enemy_list_1.append(self.enemy_ball_1)
+        enemy_list_1.append(self.enemy_ball_2)
+        enemy_list_1.append(self.enemy_ball_3)
+        enemy_list_1.append(self.enemy_ball_4)
+        enemy_list_1.append(self.enemy_ball_5)
+        enemy_list_1.append(self.enemy_ball_6)
+        enemy_list_1.append(self.enemy_ball_7)
+        enemy_list_1.append(self.enemy_ball_8)
         self.enemy_ball_1.update()
         self.enemy_ball_2.update()
         self.enemy_ball_3.update()
@@ -194,6 +202,10 @@ class MyGame(arcade.Window):
         self.enemy_ball_6.update()
         self.enemy_ball_7.update()
         self.enemy_ball_8.update()
+        if len(arcade.check_for_collision_with_list(self.ball, self.enemy_list_1)) > 0:
+            health = health - 10
+        else:
+            pass
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """

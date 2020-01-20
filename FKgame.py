@@ -7,8 +7,8 @@ python -m arcade.examples.move_keyboard
 
 import arcade
 
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 480
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Battle Zudor"
 MOVEMENT_SPEED = 7
 enemy_hp_bar = 430

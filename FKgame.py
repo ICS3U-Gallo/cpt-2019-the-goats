@@ -93,7 +93,7 @@ class Enemy1:
         self.change_y_enemy = change_y_1
         self.radius = radius_1
         self.color = color_1
-        
+        Enemy_list_1 = []
         
 
     
@@ -186,14 +186,6 @@ class MyGame(arcade.Window):
 
     def on_update(self, delta_time):
         self.ball.update()
-        enemy_list_1.append(self.enemy_ball_1)
-        enemy_list_1.append(self.enemy_ball_2)
-        enemy_list_1.append(self.enemy_ball_3)
-        enemy_list_1.append(self.enemy_ball_4)
-        enemy_list_1.append(self.enemy_ball_5)
-        enemy_list_1.append(self.enemy_ball_6)
-        enemy_list_1.append(self.enemy_ball_7)
-        enemy_list_1.append(self.enemy_ball_8)
         self.enemy_ball_1.update()
         self.enemy_ball_2.update()
         self.enemy_ball_3.update()
@@ -202,10 +194,6 @@ class MyGame(arcade.Window):
         self.enemy_ball_6.update()
         self.enemy_ball_7.update()
         self.enemy_ball_8.update()
-        if len(arcade.check_for_collision_with_list(self.ball, self.enemy_list_1)) > 0:
-            health = health - 10
-        else:
-            pass
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """

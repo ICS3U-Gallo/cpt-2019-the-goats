@@ -19,7 +19,6 @@ box_hight_down = 50
 hp_bar = 180
 health = 50
 enemy_health = 50
-gravity_blue = 0
 red_char = 1
 Self_home_x = 300
 Self_home_y = 300

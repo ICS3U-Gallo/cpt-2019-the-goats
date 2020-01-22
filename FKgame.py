@@ -1,6 +1,5 @@
 """
 This simple animation example shows how to move an item with the keyboard.
-
 If Python and Arcade are installed, this example can be run from the command line with:
 python -m arcade.examples.move_keyboard
 """
@@ -24,7 +23,7 @@ gravity_blue = 0
 red_char = 1
 Self_home_x = 300
 Self_home_y = 300
-MOVEMENT_SPEED_ENEMY_1 = 2
+MOVEMENT_SPEED_ENEMY_1 = 4
 attack_pattern = 1
 #Attack scenes
 class GUI:
@@ -47,7 +46,7 @@ class GUI:
         arcade.draw_lrtb_rectangle_outline(30, 180, 170, 120, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_outline(30, 180, 210, 190, arcade.color.WHITE)
         arcade.draw_lrtb_rectangle_filled(30, hp_bar, 210, 190, arcade.color.WHITE)
-        arcade.text.draw_text('GREEN for HP, BLUE is Safe', 35, 120, arcade.color.WHITE, 40, 700)
+        arcade.text.draw_text('BLUE TO ATTACK', 35, 120, arcade.color.WHITE, 40, 700)
         arcade.text.draw_text(f'HP Bar: {health}/50', 30, 220, arcade.color.WHITE, 15, 700)
         arcade.text.draw_text(f'Zodars HP Bar: {enemy_health}/50', 210, 300, arcade.color.WHITE, 15, 950)
     def on_key_press(self, key, modifiers):
@@ -163,7 +162,7 @@ class MyGame(arcade.Window):
             self.enemy_ball_3 = Enemy1(320, 200, 0, 0, 8, arcade.color.WHITE)
             self.enemy_ball_4 = Enemy1(270, 150, 0, 0, 8, arcade.color.WHITE)
             self.enemy_ball_5 = Enemy1(320, 230, 0, 0, 8, arcade.color.WHITE)
-            self.enemy_ball_6 = Enemy1(410, 150, 0, 0, 8, arcade.color.WHITE)   
+            self.enemy_ball_6 = Enemy1(410, 150, 0, 0, 8, arcade.color.BLUE)  
             self.enemy_ball_7 = Enemy1(320, 70, 0, 0, 8, arcade.color.WHITE)
             self.enemy_ball_8 = Enemy1(230, 150, 0, 0, 8, arcade.color.WHITE)
             

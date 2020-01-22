@@ -9,7 +9,7 @@ SPRITE_NATIVE_SIZE = 1
 ENEMY_SIZE = 2
 SPRITE_SIZE = int(SPRITE_NATIVE_SIZE * CHARACTER_SCALING)
 'Character Physics'
-MOVEMENT_SPEED = 2.5
+MOVEMENT_SPEED = 2.3
 JUMP_SPEED = 9
 GRAVITY = 0.3
 
@@ -30,6 +30,7 @@ class Chapter2View(arcade.View):
         self.player_list = None
         self.enemy_list = None
         self.wall_list = None
+        self.finish_list = None
         # Player
         self.sprite1 = None
         self.physics_engine = None
@@ -45,6 +46,14 @@ class Chapter2View(arcade.View):
         self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
+        self.finish_list = arcade.SpriteList()
+        # flag
+        flag = arcade.Sprite(":resources:images/items/flagGreen2.png", 
+                             CHARACTER_SCALING)
+        flag.center_x = 5200
+        flag.center_y = 130
+        self.finish_list.append(flag)
+
         # PLayer
         self.sprite1 = arcade.Sprite("assets/girl.png", CHARACTER_SCALING)
         self.sprite1.center_x = 150
@@ -99,7 +108,8 @@ class Chapter2View(arcade.View):
             self.wall_list.append(wall)
 
         # Enemy
-        enemy = arcade.Sprite(":resources:images/pinball/pool_cue_ball.png", ENEMY_SIZE)
+        enemy = arcade.Sprite(":resources:images/pinball/pool_cue_ball.png", 
+                              ENEMY_SIZE)
         enemy.center_x = 34
         enemy.center_y = 120
         enemy.change_x = 2
@@ -112,6 +122,7 @@ class Chapter2View(arcade.View):
         self.wall_list.draw()
         self.sprite1.draw()
         self.enemy_list.draw()
+        self.finish_list.draw()
         # Draw everything below here.def update(self, delta_time):
 
     def update(self, delta_time):
@@ -159,10 +170,13 @@ class Chapter2View(arcade.View):
                                 settings.WIDTH + self.view_left,
                                 self.view_bottom,
                                 settings.HEIGHT + self.view_bottom)
-
-        if len(arcade.check_for_collision_with_list(self.sprite1, self.enemy_list)) > 0:
+        if len(arcade.check_for_collision_with_list(self.sprite1, 
+                                                    self.finish_list)) > 0:
+            self.director.next_view()
+        if len(arcade.check_for_collision_with_list(self.sprite1, 
+                                                    self.enemy_list)) > 0:
             self.game_over = True
-
+    
         if self.game_over:
             self.setup()
             self.game_over = False
@@ -191,3 +205,17 @@ class Chapter2View(arcade.View):
             self.sprite1.change_x = 0
 
 
+if __name__ == "__main__":
+    """This section of code will allow you to run your View
+    independently from the main.py file and its Director.
+    You can ignore this whole section. Keep it at the bottom
+    of your code.
+    It is advised you do not modify it unless you really know
+    what you are doing.
+    """
+    from utils import FakeDirector
+    window = arcade.Window(settings.WIDTH, settings.HEIGHT)
+    my_view = Chapter2View()
+    my_view.director = FakeDirector(close_on_next_view=True)
+    window.show_view(my_view)
+    arcade.run()

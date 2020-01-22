@@ -163,8 +163,8 @@ class MyGame(arcade.Window):
             self.enemy_ball_4 = Enemy1(270, 150, 0, 0, 8, arcade.color.WHITE)
             self.enemy_ball_5 = Enemy1(320, 230, 0, 0, 8, arcade.color.WHITE)
             self.attack_ball = Enemy1(410, 150, 0, 0, 8, arcade.color.BLUE)  
-            self.enemy_ball_7 = Enemy1(320, 70, 0, 0, 8, arcade.color.WHITE)
-            self.enemy_ball_8 = Enemy1(230, 150, 0, 0, 8, arcade.color.WHITE)
+            self.enemy_ball_6 = Enemy1(320, 70, 0, 0, 8, arcade.color.WHITE)
+            self.enemy_ball_7 = Enemy1(230, 150, 0, 0, 8, arcade.color.WHITE)
             
 
     def on_draw(self):
@@ -178,8 +178,8 @@ class MyGame(arcade.Window):
             self.enemy_ball_4.draw()
             self.enemy_ball_5.draw()
             self.attack_ball.draw()
+            self.enemy_ball_6.draw()
             self.enemy_ball_7.draw()
-            self.enemy_ball_8.draw()
         else:
             pass
 
@@ -191,8 +191,8 @@ class MyGame(arcade.Window):
         self.enemy_ball_4.update()
         self.enemy_ball_5.update()
         self.attack_ball.update()
+        self.enemy_ball_6.update()
         self.enemy_ball_7.update()
-        self.enemy_ball_8.update()
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """

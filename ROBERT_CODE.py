@@ -125,7 +125,7 @@ class MyGame(arcade.Window):
         self.score = 0
 
     def setup(self):
-        self.player_sprite = arcade.Sprite("assets/girl.png", 0.5)
+        self.player_sprite = arcade.Sprite("girl.png", 0.5)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 100
         self.player_list = arcade.SpriteList()

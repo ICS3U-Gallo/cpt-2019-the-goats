@@ -1,3 +1,15 @@
+"""
+Sprite Follow player 2
+
+This calculates a 'vector' towards the player and randomly updates it based
+on the player's location. This is a bit more complex, but more interesting
+way of following the player.
+
+Artwork from http://kenney.nl
+
+If Python and Arcade are installed, this example can be run from the command line with:
+python -m arcade.examples.sprite_follow_simple_2
+"""
 
 import random
 import arcade
@@ -114,7 +126,7 @@ class MyGame(arcade.Window):
 
         # Set up the player
         # Character image from kenney.nl
-        self.player_sprite = arcade.Sprite("assets/girl.png", SPRITE_SCALING_player)
+        self.player_sprite = arcade.Sprite("girl.png", SPRITE_SCALING_player)
         self.player_sprite.center_x = 50
         self.player_sprite.center_y = 50
         self.player_list.append(self.player_sprite)
@@ -321,7 +333,6 @@ class MyGame(arcade.Window):
             if laser_in_contact:
                 coin.kill()
                 self.count = self.count - 1
-                print(self.count)
                 self.score += 1
                 for laser in laser_in_contact:
                     laser.kill()
